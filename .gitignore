@@ -1,0 +1,10 @@
+__pycache__/
+.venv/
+data/
+uploads/
+outputs/
+tmp-test/
+.pytest_cache/
+detalheRelatorioLaudos*.pdf
+*.pyc
+.env

@@ -1,0 +1,149 @@
+:root {
+  color: #17201b;
+  background: #f4f5f1;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  align-items: end;
+  padding: 28px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #d9ded6;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
+
+p {
+  margin: 0;
+  color: #526258;
+}
+
+button {
+  border: 1px solid #164b35;
+  background: #164b35;
+  color: #fff;
+  padding: 9px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button[type="button"], .actions button {
+  background: #fff;
+  color: #164b35;
+}
+
+input {
+  border: 1px solid #bac4bb;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.upload {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 32px;
+}
+
+#status {
+  color: #526258;
+}
+
+.tableWrap {
+  padding: 0 32px 32px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #d9ded6;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e8e2;
+  text-align: left;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+th {
+  color: #526258;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+td input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+dialog {
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.25);
+}
+
+dialog form {
+  display: grid;
+  gap: 12px;
+  width: min(520px, 92vw);
+  padding: 22px;
+}
+
+dialog h2 {
+  margin: 0;
+}
+
+dialog label {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  color: #526258;
+}
+
+dialog footer {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
+@media (max-width: 820px) {
+  .topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .upload, .actions {
+    flex-wrap: wrap;
+  }
+}

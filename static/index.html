@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etiquetas de Laudos</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <h1>Etiquetas de Laudos</h1>
+          <p>Importe laudos do SISCAN, confira os dados e gere folhas A4 com 14 etiquetas.</p>
+        </div>
+        <form id="uploadForm" class="upload">
+          <input id="pdfFile" type="file" accept="application/pdf" />
+          <button type="submit">Importar PDF</button>
+        </form>
+      </header>
+
+      <section class="actions">
+        <label><input id="selectAll" type="checkbox" /> selecionar todos</label>
+        <button id="pdfBtn">Gerar PDF</button>
+        <button id="docxBtn">Gerar DOCX</button>
+        <span id="status"></span>
+      </section>
+
+      <section class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nº exame</th>
+              <th>Paciente</th>
+              <th>Município</th>
+              <th>Bairro/Endereço</th>
+              <th>Nascimento</th>
+              <th>Realização</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <dialog id="editDialog">
+      <form method="dialog" id="editForm">
+        <h2>Ajustar dados</h2>
+        <input type="hidden" id="editId" />
+        <label>Nº exame <input id="exam_number" required /></label>
+        <label>Paciente <input id="patient_name" required /></label>
+        <label>Município <input id="city" required /></label>
+        <label>Bairro/Endereço <input id="district" required /></label>
+        <label>Data de nascimento <input id="birth_date" required /></label>
+        <label>Data da realização <input id="exam_date" required /></label>
+        <footer>
+          <button type="button" id="cancelEdit">Cancelar</button>
+          <button type="submit">Salvar</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
