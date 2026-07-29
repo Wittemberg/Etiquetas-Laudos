@@ -37,29 +37,51 @@ uvicorn app.main:app --reload
 
 Acesse `http://localhost:8000`.
 
+Para rodar localmente com Docker, use:
+
+```bash
+docker compose -f docker-compose.local.yml up --build
+```
+
 ## Docker / Portainer
 
-No Portainer, use este compose:
+No Portainer, use o arquivo `docker-compose.yml` deste repositorio ou cole esta stack:
 
 ```yaml
 services:
   etiquetas-laudos:
-    build: .
-    ports:
-      - "8000:8000"
+    image: ghcr.io/wittemberg/etiquetas-laudos:latest
+    networks:
+      - interna
     environment:
-      ETIQUETAS_PASSWORD: "troque-esta-senha"
+      TZ: America/Sao_Paulo
+      ETIQUETAS_PASSWORD: ${ETIQUETAS_PASSWORD:?Defina ETIQUETAS_PASSWORD antes do primeiro deploy}
       ETIQUETAS_DB_PATH: "/app/data/etiquetas.sqlite3"
     volumes:
-      - etiquetas_data:/app/data
-      - etiquetas_uploads:/app/uploads
-      - etiquetas_outputs:/app/outputs
-    restart: unless-stopped
+      - /root/etiquetas-laudos/data:/app/data
+      - /root/etiquetas-laudos/uploads:/app/uploads
+      - /root/etiquetas-laudos/outputs:/app/outputs
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+      rollback_config:
+        order: stop-first
+      restart_policy:
+        condition: any
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=interna"
+        - "traefik.http.routers.etiquetas-laudos.rule=Host(`etiquetas-de-laudos.wrtec.com.br`)"
+        - "traefik.http.routers.etiquetas-laudos.entrypoints=websecure"
+        - "traefik.http.routers.etiquetas-laudos.tls=true"
+        - "traefik.http.routers.etiquetas-laudos.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.etiquetas-laudos.loadbalancer.server.port=8000"
 
-volumes:
-  etiquetas_data:
-  etiquetas_uploads:
-  etiquetas_outputs:
+networks:
+  interna:
+    external: true
 ```
 
 ## Observacao sobre dados sensiveis

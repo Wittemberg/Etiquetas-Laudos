@@ -1,0 +1,19 @@
+services:
+  etiquetas-laudos:
+    build: .
+    container_name: etiquetas-laudos
+    ports:
+      - "8000:8000"
+    environment:
+      ETIQUETAS_PASSWORD: "troque-esta-senha"
+      ETIQUETAS_DB_PATH: "/app/data/etiquetas.sqlite3"
+    volumes:
+      - etiquetas_data:/app/data
+      - etiquetas_uploads:/app/uploads
+      - etiquetas_outputs:/app/outputs
+    restart: unless-stopped
+
+volumes:
+  etiquetas_data:
+  etiquetas_uploads:
+  etiquetas_outputs:
