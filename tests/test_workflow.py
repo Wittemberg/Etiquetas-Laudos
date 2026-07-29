@@ -3,8 +3,9 @@ import tempfile
 import unittest
 
 from app.db import Database
-from app.generator import generate_docx, generate_pdf
+from app.generator import LABEL_HEIGHT_CM, LABEL_WIDTH_CM, PAGE_HEIGHT_CM, PAGE_WIDTH_CM, generate_docx, generate_pdf
 from app.parser import parse_pdf
+from pypdf import PdfReader
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -93,6 +94,27 @@ class WorkflowTest(unittest.TestCase):
             self.assertGreater(pdf.stat().st_size, 1000)
             self.assertTrue(docx.exists())
             self.assertGreater(docx.stat().st_size, 10000)
+
+    def test_label_sheet_geometry_matches_stock(self):
+        self.assertEqual(PAGE_WIDTH_CM, 21.5)
+        self.assertEqual(PAGE_HEIGHT_CM, 28.0)
+        self.assertAlmostEqual(LABEL_WIDTH_CM, 10.45, places=2)
+        self.assertAlmostEqual(LABEL_HEIGHT_CM, 3.3714, places=3)
+
+    def test_pdf_uses_custom_stock_size(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            labels = parse_pdf(SAMPLE_PDF)
+            db = Database(temp_path / "db.sqlite3")
+            db.insert_labels(labels, "sample.pdf")
+            pdf = generate_pdf(db.list_labels()[:14], temp_path / "etiquetas.pdf")
+
+            page = PdfReader(str(pdf)).pages[0]
+            width_cm = float(page.mediabox.width) / 72 * 2.54
+            height_cm = float(page.mediabox.height) / 72 * 2.54
+
+            self.assertAlmostEqual(width_cm, 21.5, places=1)
+            self.assertAlmostEqual(height_cm, 28.0, places=1)
 
 
 if __name__ == "__main__":

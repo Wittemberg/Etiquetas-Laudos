@@ -17,7 +17,7 @@ Duplicados sao bloqueados quando `paciente + data de nascimento + data da realiz
 
 ## Layout das etiquetas
 
-Folha A4 com 14 etiquetas:
+Folha adesiva com 21,5 cm x 28 cm e 14 etiquetas:
 
 - 2 colunas x 7 linhas
 - Margens laterais: 0,5 mm

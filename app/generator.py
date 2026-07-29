@@ -7,20 +7,20 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Cm, Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen import canvas
 
 
-PAGE_WIDTH_CM = 21.0
-PAGE_HEIGHT_CM = 29.7
+PAGE_WIDTH_CM = 21.5
+PAGE_HEIGHT_CM = 28.0
 SIDE_MARGIN_CM = 0.05
 TOP_BOTTOM_MARGIN_CM = 2.2
 COLUMN_GAP_CM = 0.5
 LABELS_PER_ROW = 2
 ROWS_PER_PAGE = 7
+PAGE_SIZE = (PAGE_WIDTH_CM * cm, PAGE_HEIGHT_CM * cm)
 LABEL_WIDTH_CM = (PAGE_WIDTH_CM - (SIDE_MARGIN_CM * 2) - COLUMN_GAP_CM) / 2
 LABEL_HEIGHT_CM = (PAGE_HEIGHT_CM - (TOP_BOTTOM_MARGIN_CM * 2)) / ROWS_PER_PAGE
 ESTABLISHMENT_NAME = "MAMOGRAFIA CIS VERDE"
@@ -63,8 +63,8 @@ def _draw_pdf_label(pdf: canvas.Canvas, label: dict, x: float, y: float, width: 
 def generate_pdf(labels: list[dict], output_path: str | Path) -> Path:
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    pdf = canvas.Canvas(str(output), pagesize=A4)
-    page_width, page_height = A4
+    pdf = canvas.Canvas(str(output), pagesize=PAGE_SIZE)
+    page_width, page_height = PAGE_SIZE
     left_margin = SIDE_MARGIN_CM * cm
     top_margin = TOP_BOTTOM_MARGIN_CM * cm
     label_width = LABEL_WIDTH_CM * cm
