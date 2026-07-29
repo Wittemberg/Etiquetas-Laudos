@@ -2,7 +2,7 @@
 
 Sistema para importar PDFs de laudos do SISCAN, extrair dados dos pacientes, revisar a lista e gerar etiquetas para impressão em PDF e DOCX.
 
-Na tela de revisao, o operador pode ordenar os registros por data de realizacao ou numero do exame antes de selecionar as etiquetas para impressao.
+Na tela de revisao, o operador pode ordenar os registros por data de realizacao ou numero do exame antes de selecionar as etiquetas para impressao. Tambem pode selecionar automaticamente um intervalo de numeros de exame e excluir do banco os registros selecionados.
 
 ## Dados extraídos
 
@@ -49,6 +49,7 @@ services:
       - "8000:8000"
     environment:
       ETIQUETAS_PASSWORD: "troque-esta-senha"
+      ETIQUETAS_DB_PATH: "/app/data/etiquetas.sqlite3"
     volumes:
       - etiquetas_data:/app/data
       - etiquetas_uploads:/app/uploads

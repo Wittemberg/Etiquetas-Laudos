@@ -21,7 +21,7 @@ DATA_DIR = BASE_DIR / "data"
 UPLOAD_DIR = BASE_DIR / "uploads"
 OUTPUT_DIR = BASE_DIR / "outputs"
 
-db = Database(DATA_DIR / "etiquetas.sqlite3")
+db = Database(os.getenv("ETIQUETAS_DB_PATH", str(DATA_DIR / "etiquetas.sqlite3")))
 app = FastAPI(title="Etiquetas de Laudos")
 
 
@@ -55,6 +55,10 @@ class PrintRequest(BaseModel):
     ids: list[int]
 
 
+class DeleteRequest(BaseModel):
+    ids: list[int]
+
+
 @app.post("/api/import")
 async def import_pdf(file: UploadFile = File(...)):
     if not file.filename or not file.filename.lower().endswith(".pdf"):
@@ -81,6 +85,12 @@ def update_label(label_id: int, payload: LabelUpdate):
         return db.update_label(label_id, payload.model_dump())
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.delete("/api/labels")
+def delete_labels(payload: DeleteRequest):
+    deleted = db.delete_labels(payload.ids)
+    return {"deleted": deleted}
 
 
 @app.post("/api/print/pdf")

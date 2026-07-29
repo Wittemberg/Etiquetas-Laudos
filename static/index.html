@@ -21,6 +21,12 @@
 
       <section class="actions">
         <label><input id="selectAll" type="checkbox" /> selecionar todos</label>
+        <div class="rangeSelect">
+          <span>exame</span>
+          <input id="examFrom" type="number" min="0" inputmode="numeric" placeholder="de" />
+          <input id="examTo" type="number" min="0" inputmode="numeric" placeholder="ate" />
+          <button id="rangeBtn" type="button">Selecionar</button>
+        </div>
         <label class="sort">
           ordenar
           <select id="sortSelect">
@@ -33,6 +39,7 @@
         </label>
         <button id="pdfBtn">Gerar PDF</button>
         <button id="docxBtn">Gerar DOCX</button>
+        <button id="deleteBtn" class="danger" type="button">Excluir selecionados</button>
         <span id="status"></span>
       </section>
 

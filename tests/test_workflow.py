@@ -62,6 +62,22 @@ class WorkflowTest(unittest.TestCase):
 
             self.assertEqual([row["id"] for row in selected], selected_ids)
 
+    def test_deletes_selected_labels(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            labels = parse_pdf(SAMPLE_PDF)
+            db = Database(Path(temp_dir) / "db.sqlite3")
+            db.insert_labels(labels, "sample.pdf")
+            rows = db.list_labels("exam_number_asc")
+            ids = [rows[0]["id"], rows[1]["id"]]
+
+            deleted = db.delete_labels(ids)
+            remaining = db.list_labels("exam_number_asc")
+
+            self.assertEqual(deleted, 2)
+            self.assertEqual(len(remaining), 43)
+            self.assertNotIn(ids[0], [row["id"] for row in remaining])
+            self.assertNotIn(ids[1], [row["id"] for row in remaining])
+
     def test_generates_pdf_and_docx(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)

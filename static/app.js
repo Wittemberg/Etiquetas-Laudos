@@ -4,6 +4,8 @@ const uploadForm = document.querySelector("#uploadForm");
 const pdfFile = document.querySelector("#pdfFile");
 const selectAll = document.querySelector("#selectAll");
 const sortSelect = document.querySelector("#sortSelect");
+const examFrom = document.querySelector("#examFrom");
+const examTo = document.querySelector("#examTo");
 const editDialog = document.querySelector("#editDialog");
 const editForm = document.querySelector("#editForm");
 const fields = ["exam_number", "patient_name", "city", "district", "birth_date", "exam_date"];
@@ -87,6 +89,26 @@ selectAll.addEventListener("change", () => {
   });
 });
 
+document.querySelector("#rangeBtn").addEventListener("click", () => {
+  const from = Number(examFrom.value);
+  const to = Number(examTo.value);
+  if (!from || !to) {
+    setStatus("Informe o numero inicial e final do exame.");
+    return;
+  }
+  const min = Math.min(from, to);
+  const max = Math.max(from, to);
+  let count = 0;
+  document.querySelectorAll(".rowCheck").forEach((input) => {
+    const label = labels.find((item) => item.id === Number(input.value));
+    const examNumber = Number(label.exam_number);
+    input.checked = examNumber >= min && examNumber <= max;
+    if (input.checked) count += 1;
+  });
+  selectAll.checked = count === labels.length && labels.length > 0;
+  setStatus(`${count} selecionados no intervalo ${min} a ${max}.`);
+});
+
 sortSelect.addEventListener("change", async () => {
   selectAll.checked = false;
   await loadLabels();
@@ -125,5 +147,27 @@ editForm.addEventListener("submit", async (event) => {
 
 document.querySelector("#pdfBtn").addEventListener("click", () => download("/api/print/pdf", "etiquetas.pdf"));
 document.querySelector("#docxBtn").addEventListener("click", () => download("/api/print/docx", "etiquetas.docx"));
+document.querySelector("#deleteBtn").addEventListener("click", async () => {
+  const ids = selectedIds();
+  if (!ids.length) {
+    setStatus("Selecione pelo menos um registro para excluir.");
+    return;
+  }
+  const ok = window.confirm(`Excluir ${ids.length} registro(s) selecionado(s) do banco?`);
+  if (!ok) return;
+  const response = await fetch("/api/labels", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ids }),
+  });
+  if (!response.ok) {
+    setStatus("Nao foi possivel excluir os registros.");
+    return;
+  }
+  const result = await response.json();
+  selectAll.checked = false;
+  setStatus(`${result.deleted} registro(s) excluido(s).`);
+  await loadLabels();
+});
 
 loadLabels();

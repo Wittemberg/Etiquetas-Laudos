@@ -84,6 +84,23 @@ select {
   color: #526258;
 }
 
+.rangeSelect {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #526258;
+}
+
+.rangeSelect input {
+  width: 86px;
+}
+
+button.danger {
+  border-color: #9c2f24;
+  color: #9c2f24;
+  background: #fff;
+}
+
 #status {
   color: #526258;
 }

@@ -117,3 +117,12 @@ class Database:
                 ids + ids,
             ).fetchall()
         return [dict(row) for row in rows]
+
+    def delete_labels(self, ids: list[int]) -> int:
+        if not ids:
+            return 0
+        placeholders = ",".join("?" for _ in ids)
+        with closing(self.connect()) as conn:
+            cursor = conn.execute(f"DELETE FROM labels WHERE id IN ({placeholders})", ids)
+            conn.commit()
+        return cursor.rowcount
