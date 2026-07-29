@@ -23,6 +23,15 @@ CREATE TABLE IF NOT EXISTS labels (
 """
 
 
+SORTS = {
+    "created_desc": "id DESC",
+    "exam_date_asc": "substr(exam_date, 7, 4) || substr(exam_date, 4, 2) || substr(exam_date, 1, 2) ASC, CAST(exam_number AS INTEGER) ASC",
+    "exam_date_desc": "substr(exam_date, 7, 4) || substr(exam_date, 4, 2) || substr(exam_date, 1, 2) DESC, CAST(exam_number AS INTEGER) DESC",
+    "exam_number_asc": "CAST(exam_number AS INTEGER) ASC, exam_number ASC",
+    "exam_number_desc": "CAST(exam_number AS INTEGER) DESC, exam_number DESC",
+}
+
+
 class Database:
     def __init__(self, path: str | Path):
         self.path = Path(path)
@@ -72,9 +81,10 @@ class Database:
             conn.commit()
         return {"inserted": inserted, "duplicated": duplicated, "parsed": len(labels)}
 
-    def list_labels(self) -> list[dict]:
+    def list_labels(self, sort: str = "created_desc") -> list[dict]:
+        order_by = SORTS.get(sort, SORTS["created_desc"])
         with closing(self.connect()) as conn:
-            rows = conn.execute("SELECT * FROM labels ORDER BY id DESC").fetchall()
+            rows = conn.execute(f"SELECT * FROM labels ORDER BY {order_by}").fetchall()
         return [dict(row) for row in rows]
 
     def update_label(self, label_id: int, payload: dict) -> dict:
@@ -100,9 +110,10 @@ class Database:
         if not ids:
             return []
         placeholders = ",".join("?" for _ in ids)
+        order_cases = " ".join(f"WHEN ? THEN {index}" for index, _ in enumerate(ids))
         with closing(self.connect()) as conn:
             rows = conn.execute(
-                f"SELECT * FROM labels WHERE id IN ({placeholders}) ORDER BY patient_name",
-                ids,
+                f"SELECT * FROM labels WHERE id IN ({placeholders}) ORDER BY CASE id {order_cases} END",
+                ids + ids,
             ).fetchall()
         return [dict(row) for row in rows]

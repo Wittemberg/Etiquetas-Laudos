@@ -2,6 +2,8 @@
 
 Sistema para importar PDFs de laudos do SISCAN, extrair dados dos pacientes, revisar a lista e gerar etiquetas para impressão em PDF e DOCX.
 
+Na tela de revisao, o operador pode ordenar os registros por data de realizacao ou numero do exame antes de selecionar as etiquetas para impressao.
+
 ## Dados extraídos
 
 - Numero do exame
@@ -22,6 +24,7 @@ Folha A4 com 14 etiquetas:
 - Margens superior e inferior: 2,2 cm
 - Espaco entre colunas: 0,5 cm
 - Sem espaco vertical entre etiquetas
+- Cabecalho de cada etiqueta com logo CIS-VERDE e nome `MAMOGRAFIA CIS VERDE`
 
 ## Rodar localmente
 

@@ -5,7 +5,7 @@ import secrets
 from pathlib import Path
 from uuid import uuid4
 
-from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi import FastAPI, File, HTTPException, Query, Request, UploadFile
 from fastapi.responses import FileResponse
 from starlette.responses import Response
 from fastapi.staticfiles import StaticFiles
@@ -71,8 +71,8 @@ async def import_pdf(file: UploadFile = File(...)):
 
 
 @app.get("/api/labels")
-def list_labels():
-    return db.list_labels()
+def list_labels(sort: str = Query("created_desc")):
+    return db.list_labels(sort)
 
 
 @app.put("/api/labels/{label_id}")

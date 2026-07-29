@@ -35,6 +35,33 @@ class WorkflowTest(unittest.TestCase):
             self.assertEqual(first_import, {"inserted": 45, "duplicated": 0, "parsed": 45})
             self.assertEqual(second_import, {"inserted": 0, "duplicated": 45, "parsed": 45})
 
+    def test_sorts_by_exam_date_and_exam_number(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            labels = parse_pdf(SAMPLE_PDF)
+            db = Database(Path(temp_dir) / "db.sqlite3")
+            db.insert_labels(labels, "sample.pdf")
+
+            by_exam = db.list_labels("exam_number_asc")
+            exam_numbers = [int(row["exam_number"]) for row in by_exam]
+            self.assertEqual(exam_numbers, sorted(exam_numbers))
+
+            by_date = db.list_labels("exam_date_asc")
+            dates = [row["exam_date"] for row in by_date]
+            normalized = [date[6:10] + date[3:5] + date[0:2] for date in dates]
+            self.assertEqual(normalized, sorted(normalized))
+
+    def test_print_selection_preserves_screen_order(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            labels = parse_pdf(SAMPLE_PDF)
+            db = Database(Path(temp_dir) / "db.sqlite3")
+            db.insert_labels(labels, "sample.pdf")
+            by_exam = db.list_labels("exam_number_asc")
+            selected_ids = [by_exam[2]["id"], by_exam[0]["id"], by_exam[1]["id"]]
+
+            selected = db.get_labels(selected_ids)
+
+            self.assertEqual([row["id"] for row in selected], selected_ids)
+
     def test_generates_pdf_and_docx(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)

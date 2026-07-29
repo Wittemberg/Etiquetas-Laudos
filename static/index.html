@@ -21,6 +21,16 @@
 
       <section class="actions">
         <label><input id="selectAll" type="checkbox" /> selecionar todos</label>
+        <label class="sort">
+          ordenar
+          <select id="sortSelect">
+            <option value="created_desc">Importacao recente</option>
+            <option value="exam_date_asc">Data realizacao crescente</option>
+            <option value="exam_date_desc">Data realizacao decrescente</option>
+            <option value="exam_number_asc">Numero exame crescente</option>
+            <option value="exam_number_desc">Numero exame decrescente</option>
+          </select>
+        </label>
         <button id="pdfBtn">Gerar PDF</button>
         <button id="docxBtn">Gerar DOCX</button>
         <span id="status"></span>

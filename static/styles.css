@@ -57,6 +57,13 @@ input {
   padding: 8px;
 }
 
+select {
+  border: 1px solid #bac4bb;
+  border-radius: 5px;
+  padding: 8px;
+  background: #fff;
+}
+
 .upload {
   display: flex;
   gap: 10px;
@@ -68,6 +75,13 @@ input {
   align-items: center;
   gap: 14px;
   padding: 16px 32px;
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #526258;
 }
 
 #status {

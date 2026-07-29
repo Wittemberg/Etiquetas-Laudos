@@ -3,6 +3,7 @@ const statusEl = document.querySelector("#status");
 const uploadForm = document.querySelector("#uploadForm");
 const pdfFile = document.querySelector("#pdfFile");
 const selectAll = document.querySelector("#selectAll");
+const sortSelect = document.querySelector("#sortSelect");
 const editDialog = document.querySelector("#editDialog");
 const editForm = document.querySelector("#editForm");
 const fields = ["exam_number", "patient_name", "city", "district", "birth_date", "exam_date"];
@@ -14,7 +15,7 @@ function setStatus(message) {
 }
 
 async function loadLabels() {
-  const response = await fetch("/api/labels");
+  const response = await fetch(`/api/labels?sort=${encodeURIComponent(sortSelect.value)}`);
   labels = await response.json();
   renderRows();
 }
@@ -84,6 +85,11 @@ selectAll.addEventListener("change", () => {
   document.querySelectorAll(".rowCheck").forEach((input) => {
     input.checked = selectAll.checked;
   });
+});
+
+sortSelect.addEventListener("change", async () => {
+  selectAll.checked = false;
+  await loadLabels();
 });
 
 rows.addEventListener("click", (event) => {
