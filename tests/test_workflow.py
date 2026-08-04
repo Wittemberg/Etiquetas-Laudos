@@ -25,6 +25,30 @@ class WorkflowTest(unittest.TestCase):
         self.assertEqual(first.birth_date, "05/07/1964")
         self.assertEqual(first.exam_date, "26/06/2026")
 
+    def test_uses_health_unit_city_without_district_when_patient_city_differs(self):
+        labels = parse_pdf(SAMPLE_PDF)
+
+        label = next(item for item in labels if item.exam_number == "7272")
+
+        self.assertEqual(label.patient_name, "LUCINEIA CAETANO DE SOUZA PEREIRA")
+        self.assertEqual(label.city, "FERVEDOURO")
+        self.assertEqual(label.district, "")
+
+    def test_generator_omits_district_label_when_district_is_blank(self):
+        from app.generator import _format_label
+
+        lines = _format_label(
+            {
+                "patient_name": "LUCINEIA CAETANO DE SOUZA PEREIRA",
+                "city": "FERVEDOURO",
+                "district": "",
+                "birth_date": "06/09/1981",
+                "exam_date": "30/06/2026",
+            }
+        )
+
+        self.assertEqual(lines[1], ("MUNICÍPIO:", "FERVEDOURO"))
+
     def test_database_blocks_duplicate_patient_birth_and_exam_date(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             labels = parse_pdf(SAMPLE_PDF)

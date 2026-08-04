@@ -8,8 +8,9 @@ Na tela de revisao, o operador pode ordenar os registros por data de realizacao 
 
 - Numero do exame
 - Paciente
-- Municipio
-- Bairro ou endereco, quando o bairro for `ZONA RURAL`
+- Municipio da unidade solicitante quando ele for diferente do municipio do paciente; nesse caso a etiqueta fica sem bairro
+- Municipio do paciente e bairro quando os municipios forem iguais
+- Endereco no lugar do bairro quando o bairro for `ZONA RURAL`
 - Data de nascimento
 - Data da realizacao
 

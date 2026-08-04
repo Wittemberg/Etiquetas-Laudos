@@ -28,9 +28,12 @@ LOGO_PATH = Path(__file__).resolve().parent.parent / "static" / "assets" / "cis-
 
 
 def _format_label(label: dict) -> list[tuple[str, str]]:
+    location = label["city"]
+    if label["district"].strip():
+        location = f'{label["city"]}   BAIRRO: {label["district"]}'
     return [
         ("PACIENTE:", label["patient_name"]),
-        ("MUNICÍPIO:", f'{label["city"]}   BAIRRO: {label["district"]}'),
+        ("MUNICÍPIO:", location),
         ("DATA DE NASCIMENTO:", label["birth_date"]),
         ("DATA DA REALIZAÇÃO:", label["exam_date"]),
     ]
